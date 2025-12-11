@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoBi Store | Компьютерные комплектующие и Сборки ПК</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И СБРОС СТИЛЕЙ (CSS Reset) --- */
+        :root {
+            --bg-deep: #080808;
+            --bg-panel: #141414;
+            --bg-lighter: #1f1f1f;
+            --accent-red: #ff3c00;    /* Основной акцентный цвет (Красный Radeon) */
+            --accent-glow: rgba(255, 60, 0, 0.3);
+            --text-main: #eeeeee;
+            --text-muted: #999999;
+            --border: #333;
+            --success: #00e676;
+            --warning: #ffb300;
+            --error: #ff0000;
+            --rating-star: #FFD700;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            /* Легкий фоновый градиент для глубины */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 60, 0, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 60, 0, 0.05) 0%, transparent 25%);
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        select {
+            /* Стили для всех select для лучшего вида */
+            padding: 10px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+            appearance: none; /* Убираем стандартную стрелку в некоторых браузерах */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.9L146.2%20210.7L5.4%2069.9z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat, repeat;
+            background-position: right .7em top 50%, 0 0;
+            background-size: .65em auto, 100%;
+        }
+
+        /* --- 2. HEADER & NAVIGATION (Навигационная панель) --- */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            backdrop-filter: blur(10px); /* Эффект размытия */
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .logo span { color: var(--accent-red); }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a:hover { color: var(--accent-red); }
+        .nav-links a.active { color: var(--accent-red); border-bottom: 2px solid var(--accent-red); padding-bottom: 5px; }
+        
+        .cart-btn {
+            background: var(--bg-lighter);
+            border: 1px solid var(--border);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .cart-count { color: var(--accent-red); font-weight: bold; }
+
+        /* --- 3. ОБЩИЕ СТИЛИ ДЛЯ КОНТЕНТА И КНОПОК --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .section-title { font-size: 1.8rem; border-left: 4px solid var(--accent-red); padding-left: 15px; margin-bottom: 30px; }
+        .buy-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, #ff3c00, #c40000);
+            border: none;
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        .buy-btn:hover { box-shadow: 0 0 25px var(--accent-glow); transform: translateY(-2px); }
+        .mini-price { color: var(--accent-red); font-weight: bold; font-family: 'Roboto Mono'; }
+        
+        /* --- 4. СТИЛИ ДЛЯ СТРАНИЦЫ ТОВАРА (VIDEO CARD) --- */
+        .product-wrapper { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 50px; margin-top: 40px; }
+        .main-view { background: radial-gradient(circle, #1a1a1a 0%, #000 80%); border: 1px solid var(--border); border-radius: 12px; height: 500px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
+        .main-view img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7)); transition: opacity 0.3s, transform 0.3s; }
+        .thumbnails { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .thumb { 
+            background: var(--bg-panel); 
+            border: 1px solid var(--border); 
+            border-radius: 6px; 
+            height: 80px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            opacity: 0.6; 
+            transition: 0.3s; 
+        }
+        .thumb img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain; 
+        }
+        .thumb:hover, .thumb.active { opacity: 1; border-color: var(--accent-red); }
+        .product-info h1 { font-size: 2.5rem; margin: 10px 0; line-height: 1.1; text-transform: uppercase; }
+        .series-label { color: var(--accent-red); font-weight: 800; font-size: 0.9rem; letter-spacing: 2px; }
+        .rating { color: var(--rating-star); font-size: 1.1rem; margin-bottom: 20px; }
+        .price-box { background: var(--bg-panel); border: 1px solid var(--border); padding: 25px; border-radius: 10px; margin: 30px 0; position: relative; overflow: hidden; }
+        .price-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent-red); }
+        .price { font-family: 'Roboto Mono'; font-size: 3rem; font-weight: 700; }
+        .price small { font-size: 1.5rem; color: var(--text-muted); }
+        
+        .delivery-options-select { margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 6px; }
+        .delivery-options-select label {
+            display: flex;
+            align-items: center; 
+            margin-bottom: 8px; 
+            cursor: pointer;
+        }
+        .delivery-options-select input[type="radio"] { 
+            margin-right: 10px; 
+            accent-color: var(--accent-red); 
+            transform: scale(1.1);
+            margin-top: 0; 
+            margin-bottom: 0;
+            min-width: 16px; 
+            min-height: 16px;
+        }
+        .delivery-text {
+            font-weight: 600; 
+            margin-right: 5px; 
+        }
+
+        .tabs-header { display: flex; border-bottom: 2px solid var(--border); margin-top: 50px; }
+        .tab { padding: 15px 25px; cursor: pointer; font-weight: 600; border-bottom: 2px solid transparent; transition: 0.3s; color: var(--text-muted); }
+        .tab.active { color: var(--accent-red); border-color: var(--accent-red); }
+        .tab-content { padding: 25px 0; display: none; }
+        .tab-content.active { display: block; }
+        .tech-table { width: 100%; border-collapse: collapse; }
+        .tech-table td { padding: 15px; border-bottom: 1px solid #222; }
+        .tech-table tr:nth-child(even) { background: #1a1a1a; }
+        
+        .tab-content p { line-height: 1.6; color: var(--text-muted); }
+        .tab-content h3 { color: var(--accent-red); margin-top: 25px; }
+
+        /* --- 5. СТИЛИ ДЛЯ КАТАЛОГОВ (CPU & BUILDS) --- */
+        .builds-controls-section {
+            padding: 20px; 
+            background: var(--bg-panel); 
+            border-radius: 8px; 
+            margin-bottom: 40px; 
+            border: 1px solid var(--border);
+        }
+        .builds-list-section, .products-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 30px;
+        }
+        .build-card, .product-card {
+            background: var(--bg-panel); 
+            border: 1px solid #222; 
+            border-radius: 10px; 
+            padding: 25px; 
+            text-align: center; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer; 
+        }
+        .build-card:hover, .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 60, 0, 0.2);
+            border-color: var(--accent-red);
+        }
+        .specs-mini ul { padding-left: 0; text-align: left; list-style-type: none; }
+        .specs-mini ul li { margin-bottom: 5px; color: var(--text-muted); position: relative; padding-left: 20px; }
+        .specs-mini ul li::before { content: '⚡'; color: var(--accent-red); position: absolute; left: 0; font-size: 0.8rem; line-height: 1.5; }
+        .product-card img { max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 4px; }
+        .product-card h3 { line-height: 1.3; }
+
+        /* --- СТИЛИ КОНФИГУРАТОРА --- */
+        #configuratorContainer {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            margin-bottom: 40px;
+        }
+        .config-component {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #222;
+        }
+        .config-component label {
+            font-weight: 600;
+            flex-basis: 30%;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .config-component select {
+            flex-grow: 1;
+        }
+        #configTotalBox {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--bg-deep);
+            border-radius: 6px;
+            text-align: right;
+            border-left: 5px solid var(--accent-red);
+        }
+        #configTotalPrice {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            font-family: 'Roboto Mono';
+        }
+        .config-status {
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 4px;
+        }
+        .config-status-error {
+            color: var(--error);
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid var(--error);
+        }
+        /* Стили для кнопки переключения Конфигуратора */
+        .config-toggle-btn {
+            width: auto; 
+            padding: 12px 25px; 
+            background: #007bff; 
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .config-toggle-btn.active {
+            background: var(--success);
+        }
+
+        /* --- СТИЛИ СЕКЦИИ ОПЛАТЫ И ДОСТАВКИ (NEW) --- */
+        .payment-delivery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .payment-delivery-card {
+            background: var(--bg-panel);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .payment-delivery-card h3 {
+            color: var(--accent-red);
+            margin-top: 0;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #222;
+            padding-bottom: 10px;
+        }
+        .payment-delivery-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .payment-delivery-card ul li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text-main);
+        }
+        .payment-delivery-card ul li::before {
+            content: '💳'; /* Иконка для оплаты */
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-size: 1.1rem;
+        }
+        /* Стили для доставки */
+        .delivery-list li::before {
+            content: '🚚'; /* Иконка для доставки */
+            color: #00bcd4; /* Голубой цвет для доставки */
+        }
+        .delivery-details {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* --- 6. ПОДПИСКА И ФУТЕР --- */
+        .newsletter-section {
+            background: var(--bg-panel);
+            border: 1px solid var(--accent-red);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .subscribe-form {
+            display: flex;
+            max-width: 600px;
+            margin: 20px auto 0;
+            background: #222;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .subscribe-form input {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: none;
+            background: #222;
+            color: var(--text-main);
+        }
+        .subscribe-form button {
+            padding: 15px 25px;
+            background: var(--accent-red);
+            border: none;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        footer {
+            background: #101010;
+            border-top: 1px solid #222;
+            padding: 40px 0 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            gap: 30px;
+        }
+        .footer-col h4 {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        /* --- 7. ПЛАВАЮЩАЯ КНОПКА (STICKY FOOTER) --- */
+        .sticky-buy-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            border-top: 1px solid var(--accent-red);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(100%); 
+            transition: transform 0.4s ease-out;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            /* Скрываем по умолчанию, показываем только при скролле */
+            display: none; 
+        }
+        .sticky-buy-bar.visible { transform: translateY(0); display: flex; }
+        .sticky-buy-bar .product-name { font-size: 1.1rem; margin-right: 20px; }
+        .sticky-buy-bar .price-sticky { font-family: 'Roboto Mono'; font-size: 1.5rem; font-weight: 700; color: var(--accent-red); margin-right: 30px; }
+        .sticky-buy-bar button { width: 250px; padding: 12px; font-size: 1rem; }
+        
+        /* --- 8. МОДАЛЬНЫЕ ОКНА (ОБЩИЕ СТИЛИ) --- */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); }
+        .modal-content { background-color: var(--bg-panel); margin: 5% auto; padding: 30px; border: 2px solid var(--accent-red); border-radius: 10px; width: 90%; max-width: 800px; box-shadow: 0 0 40px rgba(255, 60, 0, 0.4); }
+        .close-btn { color: var(--text-muted); float: right; font-size: 30px; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .cart-delivery-info { background: #0d0d0d; border: 1px solid #222; padding: 15px; border-radius: 6px; margin-top: 20px; }
+        .cart-total { font-size: 1.5rem; font-weight: 700; text-align: right; margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333; }
+        .checkout-btn { width: 100%; padding: 15px; background: var(--success); color: var(--bg-deep); border: none; font-weight: 800; margin-top: 20px; border-radius: 4px; cursor: pointer; }
+
+        /* --- СТИЛИ ДЛЯ ФОРМЫ ОФОРМЛЕНИЯ ЗАКАЗА --- */
+        .checkout-form label { display: block; margin-top: 15px; font-weight: 600; color: var(--text-main); }
+        .checkout-form input[type="text"],
+        .checkout-form input[type="tel"],
+        .checkout-form input[type="email"],
+        .checkout-form select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .checkout-summary { 
+            background: #0d0d0d; 
+            padding: 15px; 
+            border-radius: 6px; 
+            border: 1px solid var(--accent-red); 
+            margin-top: 20px;
+        }
+        .checkout-summary h4 { 
+            color: var(--accent-red); 
+            margin: 0 0 10px 0;
+        }
+        .checkout-summary p {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .checkout-summary .total {
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        /* --- 9. МЕДИА-ЗАПРОСЫ (АДАПТИВНОСТЬ) --- */
+        @media (max-width: 900px) {
+            .product-wrapper { grid-template-columns: 1fr; }
+            .builds-list-section, .products-grid { grid-template-columns: 1fr; }
+            .payment-delivery-grid { grid-template-columns: 1fr; }
+            .sticky-buy-bar { justify-content: space-between; }
+            .sticky-buy-bar .product-name { display: none; }
+            .sticky-buy-bar button { width: 45%; }
+            .sticky-buy-bar .price-sticky { margin-right: 0; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .config-component { flex-direction: column; align-items: flex-start; }
+            .config-component label { margin-bottom: 5px; flex-basis: 100%; }
+            .config-component select { width: 100%; }
+            .modal-content { margin: 10% auto; }
+        }
+    </style>
+</head>
+<body id="pageBody">
+
+    <header>
+        <div class="navbar">
+            <div class="logo">BoBi<span>FURY</span></div>
+            <nav class="nav-links">
+                <a id="navProduct" href="#" onclick="showSection('product', event)">Видеокарты</a>
+                <a id="navProcessors" href="#" onclick="showSection('processors', event)">Процессоры</a>
+                <a id="navBuilds" href="#" onclick="showSection('builds', event)">Сборки ПК</a>
+                <a id="navWarranty" href="#" onclick="showSection('warranty', event)">Гарантия</a>
+                <a id="navDeliveryPayment" href="#" onclick="showSection('deliveryPayment', event)">Оплата/Доставка</a>
+            </nav>
+            <div class="cart-btn" onclick="openCart()">
+                🛒 Корзина <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div id="productSection" class="content-section">
+            <div style="margin: 20px 0; color: #666; font-size: 0.9rem;">
+                Главная / Комплектующие / Видеокарты / <span style="color: #fff">AMD Radeon RX 7800 XT</span>
+            </div>
+
+            <section class="product-wrapper">
+                <div>
+                    <div class="main-view">
+                        <img id="mainImg" src="https://placehold.co/800x600/111/FFF?text=RX+7800+XT+Main" alt="GPU">
+                    </div>
+                    <div class="thumbnails">
+                        <div class="thumb active" onclick="setImg(this, 'https://placehold.co/800x600/111/FFF?text=RX+7800+XT+Main')">
+                            <img src="https://placehold.co/100x100/222/FFF?text=Front+View" alt="Front">
+                        </div>
+                        <div class="thumb" onclick="setImg(this, 'https://placehold.co/800x600/111/FFF?text=Backplate+View')">
+                            <img src="https://placehold.co/100x100/222/FFF?text=Backplate" alt="Back">
+                        </div>
+                        <div class="thumb" onclick="setImg(this, 'https://placehold.co/800x600/111/FFF?text=Side+RGB')">
+                            <img src="https://placehold.co/100x100/222/FFF?text=Side+RGB" alt="Side">
+                        </div>
+                        <div class="thumb" onclick="setImg(this, 'https://placehold.co/800x600/111/FFF?text=Ports')">
+                            <img src="https://placehold.co/100x100/222/FFF?text=Ports" alt="Ports">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <span class="series-label">RDNA™ 3 ARCHITECTURE</span>
+                    <h1 id="productName" data-name="AMD Radeon RX 7800 XT 16GB">AMD Radeon RX 7800 XT 16GB</h1>
+                    
+                    <div class="rating">★★★★★ <span>(Средняя оценка: 4.9 из 5)</span></div>
+
+                    <p style="color: #ccc; line-height: 1.6;">
+                        Мощнейшее решение для **1440p** гейминга с высоким FPS. Идеальный баланс цены и производительности для современных игр.
+                    </p>
+
+                    <div class="price-box">
+                        <div class="price" id="displayPrice" data-base-price="599.99">$599<small>.99</small></div>
+                        
+                        <div style="color: var(--success); margin-top: 10px; font-size: 0.9rem;">
+                            <span id="stockStatus">● Товар в наличии (Склад UA) — **Отправка сегодня**</span>
+                        </div>
+                        <div style="color: var(--text-muted); margin-top: 5px; font-size: 0.8rem;">
+                            ✈️ Доставка курьером: **1-2 дня**
+                        </div>
+                        
+                        <div class="delivery-options-select">
+                            <label style="font-size: 1rem; color: var(--text-main); margin-bottom: 10px; display: block; font-weight: 600;">🚚 Выберите курьерскую службу:</label>
+                            
+                            <label>
+                                <input type="radio" name="delivery" value="nova_poshta_courier" checked onchange="updateDeliveryOption()"> 
+                                <span class="delivery-text">Нова Пошта</span> (Курьером до двери)
+                            </label>
+                            
+                            <label>
+                                <input type="radio" name="delivery" value="meest_courier" onchange="updateDeliveryOption()"> 
+                                <span class="delivery-text">Meest Express</span> (Курьером до двери)
+                            </label>
+                            
+                            <label>
+                                <input type="radio" name="delivery" value="nova_poshta_office" onchange="updateDeliveryOption()"> 
+                                <span class="delivery-text">Самовывоз</span> (Отделение Нова Пошта)
+                            </label>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <label style="font-size: 0.8rem; color: #888;">ВЫБЕРИТЕ ВЕНДОРА:</label>
+                            <select id="vendorSelect" onchange="updatePrice()" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; margin-top: 5px;">
+                                <option value="base" data-price-mod="0">Gigabyte Gaming OC (База)</option>
+                                <option value="sapphire" data-price-mod="20">Sapphire Nitro+ (+$20)</option>
+                                <option value="asrock" data-price-mod="10">ASRock Phantom Gaming (+$10)</option>
+                                <option value="powercolor" data-price-mod="15">PowerColor Hellhound (+$15)</option>
+                            </select>
+                        </div>
+
+                        <button class="buy-btn" onclick="addToCart(1, 'AMD Radeon RX 7800 XT')">Добавить в корзину</button>
+                    </div>
+
+                    <ul style="font-size: 0.9rem; color: #888; line-height: 2;">
+                        <li>✓ **Гарантия 36 месяцев** от производителя</li>
+                        <li>✓ Бесплатная доставка курьером по Украине</li>
+                        <li>✓ Возврат в течение 14 дней без лишних вопросов</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section style="margin-top: 80px; padding: 30px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px;">
+                <h2 style="margin-top: 0; font-size: 1.5rem; color: var(--accent-red);">✅ Проверьте Совместимость Вашего ПК</h2>
+                <p style="color: var(--text-muted);">Введите модель вашего процессора и корпуса, чтобы убедиться в отсутствии **"Дерма"** и физической совместимости.</p>
+                <div>
+                    <input type="text" id="cpuCheck" placeholder="Например, Intel Core i5-13600K" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; margin-bottom: 15px;">
+                </div>
+                <button onclick="checkCompatibility()" class="buy-btn" style="background: var(--bg-lighter); color: var(--text-main); border: 1px solid #444; width: auto; padding: 10px 20px;">Проверить</button>
+                <div id="compatibilityResult" style="margin-top: 15px; font-weight: bold;"></div>
+            </section>
+            
+            <section class="tabs-container">
+                <div class="tabs-header">
+                    <div class="tab active" onclick="openTab(event, 'specs')">Характеристики</div>
+                    <div class="tab" onclick="openTab(event, 'description')">Описание</div>
+                    <div class="tab" onclick="openTab(event, 'drivers')">Драйверы и ПО</div>
+                </div>
+                <div id="specs" class="tab-content active">
+                    <table class="tech-table">
+                        <tr><td>Графический процессор</td><td>Navi 32 XT</td></tr>
+                        <tr><td>Память</td><td>**16 GB GDDR6**</td></tr>
+                        <tr><td>Шина памяти</td><td>256-bit</td></tr>
+                        <tr><td>Макс. частота Boost</td><td>2430 MHz</td></tr>
+                        <tr><td>Энергопотребление (TBP)</td><td>263 W</td></tr>
+                        <tr><td>Рекомендованный БП</td><td>**700 W**</td></tr>
+                        <tr><td>Интерфейс</td><td>PCI Express 4.0 x16</td></tr>
+                        <tr><td>Разъемы питания</td><td>2 x 8-pin</td></tr>
+                    </table>
+                </div>
+                
+                <div id="description" class="tab-content">
+                    <h3 style="color: var(--accent-red); margin-top: 0;">🔥 Идеальный баланс для 1440p Гейминга</h3>
+                    <p>
+                        **AMD Radeon RX 7800 XT** — это видеокарта, разработанная на инновационной архитектуре **RDNA™ 3**, которая обеспечивает исключительную эффективность и мощность. Она идеально подходит для геймеров, которые хотят играть в современные тайтлы на ультра-настройках в разрешении **Quad HD (1440p)**, достигая при этом высокого и стабильного FPS.
+                    </p>
+                    <p>
+                        Благодаря **16 ГБ высокоскоростной памяти GDDR6** и продвинутым блокам Ray Tracing, эта карта гарантирует не только великолепную детализацию, но и готовность к будущим играм. Оцените плавность и четкость изображения с технологиями **AMD FidelityFX™ Super Resolution (FSR 3)** и **AMD Radeon™ Anti-Lag**.
+                    </p>
+                    
+                    <h3 style="color: var(--text-main);">Основные преимущества:</h3>
+                    <ul>
+                        <li>✨ Производительность, опережающая конкурентов в 1440p.</li>
+                        <li>✨ Эффективная система охлаждения для тихой работы даже под нагрузкой.</li>
+                        <li>✨ Поддержка новейших стандартов подключения, включая **DisplayPort 2.1**.</li>
+                    </ul>
+                </div>
+                
+                <div id="drivers" class="tab-content">
+                    <h3 style="margin-top: 0;">⚙️ Программное обеспечение AMD Adrenalin Edition</h3>
+                    <p>
+                        Для достижения максимальной производительности, настройки оверлея и доступа ко всем функциям, включая **AMD Radeon™ Super Resolution** и трассировку лучей, необходимо установить официальный пакет драйверов:
+                    </p>
+                    
+                    <ul style="list-style-type: square; padding-left: 20px;">
+                        <li><strong style="color: var(--accent-red);">Текущая версия драйвера:</strong> Adrenalin 24.11.1 (Рекомендуется)</li>
+                        <li><strong style="color: var(--accent-red);">Совместимость:</strong> Windows 10/11 (64-bit)</li>
+                    </ul>
+                    
+                    <h4 style="color: var(--text-main);">Ссылки для скачивания:</h4>
+                    <p>
+                        <a href="#" style="color: var(--success); font-weight: bold; text-decoration: underline;">➡️ Скачать AMD Adrenalin Edition (Official Site)</a>
+                    </p>
+                    
+                    <p style="font-size: 0.9rem; color: var(--text-muted); border-left: 3px solid var(--warning); padding-left: 10px;">
+                        **Важно:** Перед установкой новой версии драйвера, рекомендуем удалить предыдущую версию с помощью утилиты **DDU (Display Driver Uninstaller)**.
+                    </p>
+                </div>
+            </section>
+            
+            <section class="related-section">
+                <h2 class="section-title">С этим товаром покупают</h2>
+                <div class="products-carousel-wrapper">
+                    <div class="products-grid" id="relatedProductsGrid">
+                        <div class="product-card">
+                            <img src="https://placehold.co/200x200/222/FFF?text=Intel+i5-14600K" alt="CPU">
+                            <h3 data-name="Intel Core i5-14600K">Intel Core i5-14600K</h3>
+                            <div class="mini-price" data-price="299.99">$299.99</div>
+                            <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(2, 'Intel Core i5-14600K')">Купить</button>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://placehold.co/200x200/222/FFF?text=PSU+850W+Gold" alt="PSU">
+                            <h3 data-name="DeepCool PQ850M Gold">DeepCool PQ850M Gold</h3>
+                            <div class="mini-price" data-price="129.00">$129.00</div>
+                            <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(3, 'DeepCool PQ850M Gold')">Купить</button>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://placehold.co/200x200/222/FFF?text=NZXT+H7+Flow" alt="Case">
+                            <h3 data-name="NZXT H7 Flow Black">NZXT H7 Flow Black</h3>
+                            <div class="mini-price" data-price="139.99">$139.99</div>
+                            <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(4, 'NZXT H7 Flow Black')">Купить</button>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://placehold.co/200x200/222/FFF?text=RAM+32GB+DDR5" alt="RAM">
+                            <h3 data-name="Kingston Fury 32GB DDR5 6000MHz">Kingston Fury 32GB DDR5</h3>
+                            <div class="mini-price" data-price="95.50">$95.50</div>
+                            <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(5, 'Kingston Fury 32GB DDR5 6000MHz')">Купить</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="warrantySection" class="content-section" style="display: none;">
+            <h1 class="section-title">🛡️ Гарантия и Условия Возврата</h1>
+            <p style="padding: 20px; background: var(--bg-panel); border-radius: 8px;">
+                На все комплектующие предоставляется официальная гарантия **36 месяцев** от производителя. Мы также предоставляем расширенную гарантию **12 месяцев** на все сборки ПК от нашего магазина. Вы можете вернуть товар в течение 14 дней без объяснения причин при условии сохранения товарного вида и упаковки.
+            </p>
+        </div>
+        
+        <div id="processorsSection" class="content-section" style="display: none;">
+            
+            <div style="margin: 20px 0; color: #666; font-size: 0.9rem;">
+                Главная / <span style="color: #fff">Процессоры</span>
+            </div>
+            
+            <h1 class="section-title">Центральные Процессоры (CPU) 🚀</h1>
+            
+            <section class="builds-controls-section" style="margin-bottom: 40px;">
+                <h3 style="margin-top: 0; color: var(--text-main);">Сортировка и Фильтр</h3>
+                <div style="display: flex; gap: 20px; font-size: 0.9rem; flex-wrap: wrap;">
+                    <select style="padding: 10px; background: #222; color: #fff; border: 1px solid #444;"><option>По цене</option></select>
+                    <select style="padding: 10px; background: #222; color: #fff; border: 1px solid #444;"><option>Все Бренды</option><option>AMD Ryzen</option><option>Intel Core</option></select>
+                </div>
+            </section>
+
+            <section class="products-grid" style="overflow-x: visible;">
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Ryzen+9+7950X3D" alt="AMD Ryzen 9 7950X3D">
+                    <h3 data-name="AMD Ryzen 9 7950X3D">AMD Ryzen 9 7950X3D</h3>
+                    <div style="font-size: 0.9rem; color: var(--accent-red); margin-bottom: 10px;">👑 Ультимативная мощность</div>
+                    <div class="mini-price" data-price="699.00" style="font-size: 1.4rem;">$699.00</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(11, 'AMD Ryzen 9 7950X3D')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Intel+i9-14900K" alt="Intel Core i9-14900K">
+                    <h3 data-name="Intel Core i9-14900K">Intel Core i9-14900K</h3>
+                    <div style="font-size: 0.9rem; color: var(--warning); margin-bottom: 10px;">🛠️ Профессиональный</div>
+                    <div class="mini-price" data-price="559.99" style="font-size: 1.4rem;">$559.99</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(7, 'Intel Core i9-14900K')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Ryzen+7+7800X3D" alt="AMD Ryzen 7 7800X3D">
+                    <h3 data-name="AMD Ryzen 7 7800X3D">AMD Ryzen 7 7800X3D</h3>
+                    <div style="font-size: 0.9rem; color: var(--success); margin-bottom: 10px;">🏆 Лучший для игр</div>
+                    <div class="mini-price" data-price="379.99" style="font-size: 1.4rem;">$379.99</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(6, 'AMD Ryzen 7 7800X3D')">Купить</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Intel+i7-14700K" alt="Intel Core i7-14700K">
+                    <h3 data-name="Intel Core i7-14700K">Intel Core i7-14700K</h3>
+                    <div style="font-size: 0.9rem; color: var(--warning); margin-bottom: 10px;">⚙️ Мультизадачность</div>
+                    <div class="mini-price" data-price="409.50" style="font-size: 1.4rem;">$409.50</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(12, 'Intel Core i7-14700K')">Купить</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Ryzen+7+7700X" alt="AMD Ryzen 7 7700X">
+                    <h3 data-name="AMD Ryzen 7 7700X">AMD Ryzen 7 7700X</h3>
+                    <div style="font-size: 0.9rem; color: #00bcd4; margin-bottom: 10px;">🧊 Отличный QHD</div>
+                    <div class="mini-price" data-price="319.00" style="font-size: 1.4rem;">$319.00</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(14, 'AMD Ryzen 7 7700X')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Intel+i5-14600K" alt="Intel Core i5-14600K">
+                    <h3 data-name="Intel Core i5-14600K">Intel Core i5-14600K</h3>
+                    <div style="font-size: 0.9rem; color: var(--success); margin-bottom: 10px;">💪 Середняк-чемпион</div>
+                    <div class="mini-price" data-price="299.99" style="font-size: 1.4rem;">$299.99</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(15, 'Intel Core i5-14600K')">Купить</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Ryzen+5+7600" alt="AMD Ryzen 5 7600">
+                    <h3 data-name="AMD Ryzen 5 7600">AMD Ryzen 5 7600</h3>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">⭐ Оптимальный выбор</div>
+                    <div class="mini-price" data-price="199.50" style="font-size: 1.4rem;">$199.50</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(8, 'AMD Ryzen 5 7600')">Купить</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Intel+i5-14400F" alt="Intel Core i5-14400F">
+                    <h3 data-name="Intel Core i5-14400F">Intel Core i5-14400F</h3>
+                    <div class="mini-price" data-price="179.90" style="font-size: 1.4rem;">$179.90</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(9, 'Intel Core i5-14400F')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Ryzen+5+5600" alt="AMD Ryzen 5 5600">
+                    <h3 data-name="AMD Ryzen 5 5600">AMD Ryzen 5 5600</h3>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">Legacy AM4 Gaming</div>
+                    <div class="mini-price" data-price="110.00" style="font-size: 1.4rem;">$110.00</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(13, 'AMD Ryzen 5 5600')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Intel+i3-13100F" alt="Intel Core i3-13100F">
+                    <h3 data-name="Intel Core i3-13100F">Intel Core i3-13100F</h3>
+                    <div style="font-size: 0.9rem; color: #888; margin-bottom: 10px;">💸 Бюджетный старт</div>
+                    <div class="mini-price" data-price="99.00" style="font-size: 1.4rem;">$99.00</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(10, 'Intel Core i3-13100F')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Ryzen+3+4100" alt="AMD Ryzen 3 4100">
+                    <h3 data-name="AMD Ryzen 3 4100">AMD Ryzen 3 4100</h3>
+                    <div style="font-size: 0.9rem; color: #888; margin-bottom: 10px;">🖥️ Офисный/HTPC</div>
+                    <div class="mini-price" data-price="59.99" style="font-size: 1.4rem;">$59.99</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(16, 'AMD Ryzen 3 4100')">Купить</button>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://placehold.co/200x200/222/FFF?text=Intel+G7400" alt="Intel Pentium G7400">
+                    <h3 data-name="Intel Pentium G7400">Intel Pentium G7400</h3>
+                    <div style="font-size: 0.9rem; color: #888; margin-bottom: 10px;">💻 Рабочий минимум</div>
+                    <div class="mini-price" data-price="49.99" style="font-size: 1.4rem;">$49.99</div>
+                    <button class="buy-btn" style="padding: 8px; margin-top: 10px;" onclick="addToCart(17, 'Intel Pentium G7400')">Купить</button>
+                </div>
+
+
+            </section>
+        </div>
+        
+        <div id="buildsSection" class="content-section" style="display: none;">
+            
+            <div style="margin: 20px 0; color: #666; font-size: 0.9rem;">
+                Главная / <span style="color: #fff">Сборки ПК</span>
+            </div>
+            
+            <h1 class="section-title">Готовые Сборки Игровых ПК 🔥</h1>
+            
+            <section class="builds-controls-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <h3 style="margin: 0; color: var(--text-main);">🔍 Подберите свой ПК</h3>
+                    <button id="configToggleBtn" class="buy-btn config-toggle-btn" style="width: auto; padding: 12px 25px;" onclick="toggleConfigurator()">
+                        ⚙️ Перейти в Конфигуратор
+                    </button>
+                </div>
+            </section>
+            
+            <div id="configuratorContainer" style="display: none;">
+                <h2 style="margin-top: 0; color: var(--accent-red); border-bottom: 1px solid #333; padding-bottom: 10px;">Конфигуратор Сборки ПК</h2>
+                
+                <div class="config-component">
+                    <label for="configCpu">Процессор (CPU):</label>
+                    <select id="configCpu" onchange="updateConfigurator()">
+                        <option value="none" data-price="0" data-socket="none" data-ram="none">Выберите процессор...</option>
+                        <option value="i9-14900K" data-price="559.99" data-socket="LGA1700" data-ram="DDR5">Intel Core i9-14900K</option>
+                        <option value="i7-14700K" data-price="409.50" data-socket="LGA1700" data-ram="DDR5">Intel Core i7-14700K</option>
+                        <option value="i5-14600K" data-price="299.99" data-socket="LGA1700" data-ram="DDR5">Intel Core i5-14600K</option>
+                        <option value="i5-14400F" data-price="179.90" data-socket="LGA1700" data-ram="DDR4">Intel Core i5-14400F</option>
+                        <option value="i3-13100F" data-price="99.00" data-socket="LGA1700" data-ram="DDR4">Intel Core i3-13100F</option>
+                        <option value="R9-7950X3D" data-price="699.00" data-socket="AM5" data-ram="DDR5">AMD Ryzen 9 7950X3D</option>
+                        <option value="R7-7800X3D" data-price="379.99" data-socket="AM5" data-ram="DDR5">AMD Ryzen 7 7800X3D</option>
+                        <option value="R5-7600" data-price="199.50" data-socket="AM5" data-ram="DDR5">AMD Ryzen 5 7600</option>
+                        <option value="R5-5600" data-price="110.00" data-socket="AM4" data-ram="DDR4">AMD Ryzen 5 5600</option>
+                        <option value="R3-4100" data-price="59.99" data-socket="AM4" data-ram="DDR4">AMD Ryzen 3 4100</option>
+                    </select>
+                </div>
+                
+                <div class="config-component">
+                    <label for="configMb">Материнская плата (MB):</label>
+                    <select id="configMb" onchange="updateConfigurator()">
+                        <option value="none" data-price="0" data-socket="none" data-ram="none" data-form="none">Выберите материнскую плату...</option>
+                        <option value="Z790-D5" data-price="250.00" data-socket="LGA1700" data-ram="DDR5" data-form="ATX">Z790 Gigabyte AORUS ELITE (LGA1700, DDR5, ATX)</option>
+                        <option value="B760-D4" data-price="150.00" data-socket="LGA1700" data-ram="DDR4" data-form="mATX">B760 ASUS PRIME (LGA1700, DDR4, mATX)</option>
+                        <option value="B660-D4" data-price="120.00" data-socket="LGA1700" data-ram="DDR4" data-form="mATX">B660 MSI PRO (LGA1700, DDR4, mATX) [NEW]</option>
+                        <option value="X670-D5" data-price="300.00" data-socket="AM5" data-ram="DDR5" data-form="ATX">X670 MSI PRO (AM5, DDR5, ATX)</option>
+                        <option value="B650-D5" data-price="180.00" data-socket="AM5" data-ram="DDR5" data-form="ATX">B650 Gigabyte GAMING X (AM5, DDR5, ATX)</option>
+                        <option value="A620-D5" data-price="100.00" data-socket="AM5" data-ram="DDR5" data-form="mATX">A620 ASRock PRO RS (AM5, DDR5, mATX) [NEW]</option>
+                        <option value="B550-D4" data-price="100.00" data-socket="AM4" data-ram="DDR4" data-form="mATX">B550 ASRock Phantom Gaming (AM4, DDR4, mATX)</option>
+                        <option value="A520-D4" data-price="65.00" data-socket="AM4" data-ram="DDR4" data-form="mATX">A520 Gigabyte S2H (AM4, DDR4, mATX) [NEW]</option>
+                    </select>
+                </div>
+                
+                <div class="config-component">
+                    <label for="configRam">Оперативная память (RAM):</label>
+                    <select id="configRam" onchange="updateConfigurator()">
+                        <option value="none" data-price="0" data-ram="none">Выберите оперативную память...</option>
+                        <option value="DDR5-32-6000" data-price="95.50" data-ram="DDR5">32GB DDR5 6000MHz (2x16GB)</option>
+                        <option value="DDR5-64-7200" data-price="190.00" data-ram="DDR5">64GB DDR5 7200MHz (2x32GB)</option>
+                        <option value="DDR5-16-6000" data-price="55.00" data-ram="DDR5">16GB DDR5 6000MHz (2x8GB) [NEW]</option>
+                        <option value="DDR4-16-3200" data-price="45.00" data-ram="DDR4">16GB DDR4 3200MHz (2x8GB)</option>
+                        <option value="DDR4-32-3600" data-price="65.00" data-ram="DDR4">32GB DDR4 3600MHz (2x16GB)</option>
+                        <option value="DDR4-8-3200" data-price="25.00" data-ram="DDR4">8GB DDR4 3200MHz (1x8GB) [NEW]</option>
+                    </select>
+                </div>
+                
+                <div class="config-component">
+                    <label for="configGpu">Видеокарта (GPU):</label>
+                    <select id="configGpu" onchange="updateConfigurator()">
+                        <option value="none" data-price="0">Выберите видеокарту...</option>
+                        <option value="RTX-4090" data-price="1999.00">NVIDIA RTX 4090 24GB</option>
+                        <option value="RTX-4080S" data-price="1050.00">NVIDIA RTX 4080 SUPER 16GB [NEW]</option>
+                        <option value="RX-7900XTX" data-price="950.00">AMD Radeon RX 7900 XTX 24GB</option>
+                        <option value="RTX-4070" data-price="620.00">NVIDIA RTX 4070 SUPER 12GB</option>
+                        <option value="RX-7800XT" data-price="609.99">AMD Radeon RX 7800 XT 16GB</option>
+                        <option value="RTX-4060" data-price="310.00">NVIDIA RTX 4060 8GB</option>
+                        <option value="RX-6600" data-price="200.00">AMD Radeon RX 6600 8GB [NEW]</option>
+                    </select>
+                </div>
+                
+                <div class="config-component">
+                    <label for="configPsu">Блок питания (PSU):</label>
+                    <select id="configPsu" onchange="updateConfigurator()">
+                        <option value="none" data-price="0" data-wattage="0">Выберите блок питания...</option>
+                        <option value="PSU-1600W" data-price="350.00" data-wattage="1600">Seasonic PRIME 1600W Platinum [NEW]</option>
+                        <option value="PSU-1300W" data-price="250.00" data-wattage="1300">Corsair 1300W Platinum</option>
+                        <option value="PSU-1000W" data-price="180.00" data-wattage="1000">DeepCool 1000W Gold</option>
+                        <option value="PSU-850W" data-price="129.00" data-wattage="850">DeepCool 850W Gold</option>
+                        <option value="PSU-750W" data-price="85.00" data-wattage="750">Seasonic 750W Bronze</option>
+                        <option value="PSU-650W" data-price="65.00" data-wattage="650">be quiet! System Power 650W [NEW]</option>
+                        <option value="PSU-550W" data-price="50.00" data-wattage="550">Chieftec 550W (Бюджет) [NEW]</option>
+                    </select>
+                </div>
+
+                <div class="config-component">
+                    <label for="configCase">Корпус (Case):</label>
+                    <select id="configCase" onchange="updateConfigurator()">
+                        <option value="none" data-price="0" data-form-support="none">Выберите корпус...</option>
+                        <option value="NZXT H7 Flow" data-price="139.99" data-form-support="ATX,mATX,Mini-ITX">NZXT H7 Flow (Mid-Tower, ATX)</option>
+                        <option value="Lian Li 216" data-price="120.00" data-form-support="ATX,mATX">Lian Li Lancool 216 (Mid-Tower, ATX)</option>
+                        <option value="Cooler Master NR400" data-price="75.00" data-form-support="mATX,Mini-ITX">Cooler Master NR400 (mATX)</option>
+                        <option value="Fractal North" data-price="150.00" data-form-support="ATX">Fractal Design North (Mid-Tower, ATX)</option>
+                        <option value="DeepCool CH510" data-price="85.00" data-form-support="ATX,mATX">DeepCool CH510 Mesh (Mid-Tower, ATX) [NEW]</option>
+                        <option value="GigaByte C200" data-price="45.00" data-form-support="ATX,mATX">GigaByte C200 (Budget, ATX) [NEW]</option>
+                    </select>
+                </div>
+                
+                <div class="config-status" id="configStatusMessage">
+                    ✅ Конфигурация совместима.
+                </div>
+
+                <div id="configTotalBox">
+                    <h4 style="margin: 0; color: var(--text-main);">ИТОГО, стоимость сборки:</h4>
+                    <span id="configTotalPrice">$0.00</span>
+                    <button class="buy-btn" id="configBuyBtn" onclick="configuratorAddToCart()" style="margin-top: 10px; padding: 12px; width: 100%;">Добавить Сборку в Корзину</button>
+                </div>
+
+            </div>
+            <section class="builds-list-section" id="prebuiltConfigs">
+                <h2 class="section-title">Популярные Готовые Сборки</h2>
+                
+                <div class="build-card">
+                    <h3 style="color: var(--success); margin-top: 0; font-size: 1.5rem;">🎮 OPTIMAL BUILD</h3>
+                    <h2 style="margin: 5px 0;" data-name="Народный Герой">"Народный Герой"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+Mid" alt="Optimal Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** AMD Ryzen 5 7600</li>
+                            <li>**GPU:** AMD Radeon RX 7800 XT</li>
+                            <li>**RAM:** 32GB DDR5 (6000 MHz)</li>
+                            <li>**Цель:** Ультра-настройки в 1440p</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="1399.00">
+                        $1399.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(101, 'Народный Герой', 1399.00)" data-price="1399.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+
+                <div class="build-card">
+                    <h3 style="color: var(--warning); margin-top: 0; font-size: 1.5rem;">💰 BUDGET BUILD</h3>
+                    <h2 style="margin: 5px 0;" data-name="Стартовый Пак">"Стартовый Пак"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+Budget" alt="Budget Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** Intel Core i3-13100F</li>
+                            <li>**GPU:** NVIDIA RTX 4060</li>
+                            <li>**RAM:** 16GB DDR4 (3200 MHz)</li>
+                            <li>**Цель:** Высокие настройки в 1080p</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="799.00">
+                        $799.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(102, 'Стартовый Пак', 799.00)" data-price="799.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+
+                <div class="build-card">
+                    <h3 style="color: var(--accent-red); margin-top: 0; font-size: 1.5rem;">🚀 PREMIUM 4K</h3>
+                    <h2 style="margin: 5px 0;" data-name="Полный Фарш">"Полный Фарш"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+High" alt="Premium Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** AMD Ryzen 9 7950X3D</li>
+                            <li>**GPU:** NVIDIA RTX 4090</li>
+                            <li>**RAM:** 64GB DDR5 (7200 MHz)</li>
+                            <li>**Цель:** Максимальные настройки в 4K+</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="3999.00">
+                        $3999.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(103, 'Полный Фарш', 3999.00)" data-price="3999.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+                
+                <div class="build-card">
+                    <h3 style="color: #00bcd4; margin-top: 0; font-size: 1.5rem;">💻 WORKSTATION</h3>
+                    <h2 style="margin: 5px 0;" data-name="Pro Render">"Pro Render"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+Work" alt="Workstation PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** Intel Core i7-14700K</li>
+                            <li>**GPU:** NVIDIA RTX 4070 SUPER</li>
+                            <li>**RAM:** 64GB DDR5 (6000 MHz)</li>
+                            <li>**Цель:** 3D Рендеринг и Видеомонтаж</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="2450.00">
+                        $2450.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(104, 'Pro Render', 2450.00)" data-price="2450.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+                
+                <div class="build-card">
+                    <h3 style="color: var(--accent-red); margin-top: 0; font-size: 1.5rem;">🔴 MAX AMD</h3>
+                    <h2 style="margin: 5px 0;" data-name="Red Beast">"Red Beast"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+AMD" alt="Max AMD Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** AMD Ryzen 7 7800X3D</li>
+                            <li>**GPU:** AMD Radeon RX 7900 XTX</li>
+                            <li>**RAM:** 32GB DDR5 (6000 MHz)</li>
+                            <li>**Цель:** Высокий FPS в 4K с FSR 3</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="2100.00">
+                        $2100.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(105, 'Red Beast', 2100.00)" data-price="2100.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+                
+                <div class="build-card">
+                    <h3 style="color: var(--success); margin-top: 0; font-size: 1.5rem;">✨ COMPACT GAMING</h3>
+                    <h2 style="margin: 5px 0;" data-name="Mini QHD">"Mini QHD"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+Mini" alt="Compact Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** Intel Core i5-14400F</li>
+                            <li>**GPU:** NVIDIA RTX 4070 SUPER</li>
+                            <li>**RAM:** 32GB DDR4 (3600 MHz)</li>
+                            <li>**Цель:** QHD в компактном корпусе</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="1450.00">
+                        $1450.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(106, 'Mini QHD', 1450.00)" data-price="1450.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+                
+                <div class="build-card">
+                    <h3 style="color: #00bcd4; margin-top: 0; font-size: 1.5rem;">📉 ECO AM5</h3>
+                    <h2 style="margin: 5px 0;" data-name="Future Start">"Future Start"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+Eco" alt="Eco AM5 Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** AMD Ryzen 5 7500F</li>
+                            <li>**GPU:** AMD Radeon RX 6600</li>
+                            <li>**RAM:** 16GB DDR5 (6000 MHz)</li>
+                            <li>**Цель:** Игры в 1080p, готовность к апгрейду</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="899.00">
+                        $899.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(107, 'Future Start', 899.00)" data-price="899.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+                
+                <div class="build-card">
+                    <h3 style="color: var(--accent-red); margin-top: 0; font-size: 1.5rem;">🥇 EXTREME INTEL</h3>
+                    <h2 style="margin: 5px 0;" data-name="Max FPS 4K">"Max FPS 4K"</h2>
+                    <img src="https://placehold.co/300x200/222/FFF?text=PC+Build+Max" alt="Extreme Intel Build PC" style="width: 100%; height: auto; border-radius: 6px; margin: 15px 0;">
+                    
+                    <div class="specs-mini">
+                        <ul style="padding-left: 0;">
+                            <li>**CPU:** Intel Core i9-14900K</li>
+                            <li>**GPU:** NVIDIA RTX 4080 SUPER</li>
+                            <li>**RAM:** 64GB DDR5 (7200 MHz)</li>
+                            <li>**Цель:** Максимальный FPS в 4K и VR</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="price" style="font-family: 'Roboto Mono'; font-size: 2rem; font-weight: 700; color: var(--accent-red); margin-bottom: 15px;" data-price="3300.00">
+                        $3300.00
+                    </div>
+                    
+                    <button class="buy-btn" onclick="addToCart(108, 'Max FPS 4K', 3300.00)" data-price="3300.00" style="width: 100%; padding: 15px;">Добавить в корзину</button>
+                </div>
+
+            </section>
+
+        </div>
+
+        <div id="deliveryPaymentSection" class="content-section" style="display: none;">
+            <div style="margin: 20px 0; color: #666; font-size: 0.9rem;">
+                Главная / <span style="color: #fff">Оплата и Доставка</span>
+            </div>
+            
+            <h1 class="section-title">💸 Как Оплатить и Получить Заказ</h1>
+            
+            <p style="color: var(--text-muted); padding: 10px; border-left: 4px solid var(--success);">
+                Мы предлагаем максимально удобные и безопасные способы оплаты, а также быструю доставку по всей стране.
+            </p>
+            
+            <section class="payment-delivery-grid">
+                <div class="payment-delivery-card">
+                    <h3>Способы Оплаты</h3>
+                    <ul>
+                        <li>
+                            **Онлайн-оплата картой (Visa/Mastercard)**
+                            <span class="delivery-details">Моментальное зачисление через защищенный шлюз LiqPay/Portmone.</span>
+                        </li>
+                        <li>
+                            **Оплата при получении (Наложенный платеж)**
+                            <span class="delivery-details">Доступно для "Новой Почты" и Meest Express. Комиссия оплачивается покупателем.</span>
+                        </li>
+                        <li>
+                            **Безналичный расчет для юр. лиц**
+                            <span class="delivery-details">Работаем с НДС. Предоставим все необходимые документы.</span>
+                        </li>
+                        <li>
+                            **Оплата частями / Кредит**
+                            <span class="delivery-details">Рассрочка от ПриватБанка и Monobank на срок до 24 месяцев.</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="payment-delivery-card">
+                    <h3>Службы Доставки</h3>
+                    <ul class="delivery-list">
+                        <li>
+                            **Новая Почта (Курьером)**
+                            <span class="delivery-details">Бесплатно для заказов от $200. Срок 1-2 дня.</span>
+                        </li>
+                        <li>
+                            **Новая Почта (Отделение)**
+                            <span class="delivery-details">Бесплатно для всех товаров. Самая быстрая отправка.</span>
+                        </li>
+                        <li>
+                            **Meest Express**
+                            <span class="delivery-details">Альтернативная курьерская служба. Срок 1-3 дня.</span>
+                        </li>
+                        <li>
+                            **Самовывоз (Киев)**
+                            <span class="delivery-details">Бесплатно. Выдача со склада после согласования заказа.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        
+        <div class="newsletter-section">
+            <h2>🔥 BoBi News: Будь в Курсе! 🔥</h2>
+            <p>Получайте уведомления о **горячих скидках**, новых поступлениях и эксклюзивных сборках ПК первыми. Без спама!</p>
+            <form class="subscribe-form" onsubmit="subscribe(event)">
+                <input type="email" placeholder="Введите ваш E-mail для подписки" required>
+                <button type="submit">Подписаться</button>
+            </form>
+            <div id="subscribe-message" style="margin-top: 20px; font-weight: bold; color: var(--success);"></div>
+        </div>
+
+    </div>
+    
+    <div class="sticky-buy-bar" id="stickyBuyBar">
+        <span class="product-name" id="stickyProductName">AMD Radeon RX 7800 XT</span>
+        <span class="price-sticky" id="stickyPrice">$599.99</span>
+        <button class="buy-btn" onclick="addToCart(1, 'AMD Radeon RX 7800 XT')">Добавить в корзину</button>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCart()">&times;</span>
+            <h2>🛒 Ваша Корзина</h2>
+            
+            <div id="cartItemsContainer">
+                <div style="color: #888; text-align: center; padding: 20px;">Корзина пуста.</div>
+            </div>
+            
+            <div class="cart-delivery-info">
+                <h5>🚚 Способ доставки</h5>
+                <p>Вы выбрали: <strong id="currentDeliveryMethod">Нова Пошта (Курьером до двери)</strong></p>
+                <p>Срок: <strong id="currentDeliveryTime">1-2 дня</strong></p>
+            </div>
+
+            <div class="cart-total">
+                ИТОГО: <span id="cartTotalValue">$0.00</span>
+            </div>
+
+            <button class="checkout-btn" onclick="openCheckout()">Оформить заказ</button> </div>
+    </div>
+    
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-btn" onclick="closeCheckout()">&times;</span>
+            <h2>📋 Оформление Заказа</h2>
+            
+            <form id="checkoutForm" class="checkout-form" onsubmit="submitOrder(event)">
+                
+                <label for="name">Ваше Имя и Фамилия:</label>
+                <input type="text" id="name" name="name" required placeholder="Иванов Иван">
+
+                <label for="phone">Номер телефона:</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+38 (XXX) XXX XX XX">
+                
+                <label for="email">E-mail (для чека и уведомлений):</label>
+                <input type="email" id="email" name="email" required placeholder="example@mail.com">
+
+                <h3 style="color: var(--success); border-top: 1px solid #333; padding-top: 15px; margin-top: 25px;">🚚 Детали Доставки</h3>
+                
+                <label for="deliveryMethod">Выбранный способ доставки:</label>
+                <input type="text" id="deliveryMethod" readonly style="color: var(--accent-red); font-weight: 700;">
+
+                <label for="deliveryAddress">Город и Отделение / Адрес:</label>
+                <input type="text" id="deliveryAddress" name="deliveryAddress" required placeholder="Киев, Отделение №15 или ул. Крещатик, 1">
+
+                <h3 style="color: var(--accent-red); border-top: 1px solid #333; padding-top: 15px; margin-top: 25px;">💳 Способ Оплаты</h3>
+
+                <select id="paymentMethod" name="paymentMethod" required>
+                    <option value="card">Онлайн-оплата картой (Visa/Mastercard)</option>
+                    <option value="cash_on_delivery">Оплата при получении (Наложенный платеж)</option>
+                    <option value="bank_transfer">Безналичный расчет (Счет)</option>
+                </select>
+
+                <div class="checkout-summary">
+                    <h4>Сводка Заказа</h4>
+                    <p>Товары (<span id="summaryCount">0</span> шт.): <span><strong id="summarySubtotal">$0.00</strong></span></p>
+                    <p>Доставка: <span>$0.00 (Бесплатно)</span></p>
+                    <p class="total">К оплате: <span><strong id="summaryTotal">$0.00</strong></span></p>
+                </div>
+                
+                <button type="submit" class="buy-btn" style="background: var(--success);">Подтвердить и Оплатить</button>
+            </form>
+            
+            <div id="orderConfirmation" style="display: none; text-align: center; padding: 30px;">
+                <h3 style="color: var(--success);">🎉 Заказ успешно оформлен!</h3>
+                <p>Мы свяжемся с вами в течение 15 минут для подтверждения деталей.</p>
+                <p style="font-weight: bold; color: var(--accent-red);">Номер вашего заказа: #<span id="orderNumber"></span></p>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Каталог</h4>
+                <ul><li>Видеокарты</li><li>Процессоры</li><li>Материнские платы</li></ul>
+            </div>
+            <div class="footer-col">
+                <h4>Клиентам</h4>
+                <ul>
+                    <li>Статус заказа</li>
+                    <li>Условия доставки</li>
+                    <li><a href="#" onclick="showSection('deliveryPayment', event)">**Оплата и Доставка**</a></li> </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <ul><li>📞 +38 (044) 123-45-67</li><li>✉️ support@bobi.com.ua</li></ul>
+            </div>
+            <div class="footer-col">
+                <h4>Следите за нами</h4>
+                <ul class="social-icons" style="display: flex; gap: 15px;"><li><a href="#">🌐</a></li></ul>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BoBi PC Store. Все права защищены.
+        </div>
+    </footer>
+
+    <script>
+        // --- ПЕРЕМЕННЫЕ ИНИЦИАЛИЗАЦИИ ---
+        let cart = []; 
+        let currentDelivery = { name: 'Нова Пошта (Курьером до двери)', value: 'nova_poshta_courier', cost: 0.00, time: '1-2 дня' };
+        const deliveryMethods = {
+            'nova_poshta_courier': { name: 'Нова Пошта (Курьером до двери)', value: 'nova_poshta_courier', cost: 0.00, time: '1-2 дня' },
+            'meest_courier': { name: 'Meest Express (Курьером до двери)', value: 'meest_courier', cost: 0.00, time: '1-3 дня' },
+            'nova_poshta_office': { name: 'Самовывоз (Отделение Нова Пошта)', value: 'nova_poshta_office', cost: 0.00, time: '2-3 дня' }
+        };
+
+        // --- ЛОГИКА КОНФИГУРАТОРА ---
+        const configuratorState = {
+            cpu: { name: 'none', price: 0, socket: 'none', ramType: 'none' },
+            mb: { name: 'none', price: 0, socket: 'none', ramType: 'none', formFactor: 'none' },
+            ram: { name: 'none', price: 0, ramType: 'none' },
+            gpu: { name: 'none', price: 0, requiredPsu: 0 },
+            psu: { name: 'none', price: 0, wattage: 0 },
+            case: { name: 'none', price: 0, formSupport: 'none' }
+        };
+
+        function toggleConfigurator() {
+            const configContainer = document.getElementById('configuratorContainer');
+            const prebuiltConfigs = document.getElementById('prebuiltConfigs');
+            const toggleBtn = document.getElementById('configToggleBtn');
+
+            const isVisible = configContainer.style.display !== 'none';
+            
+            if (isVisible) {
+                configContainer.style.display = 'none';
+                prebuiltConfigs.style.display = 'grid'; // Показываем готовые сборки
+                toggleBtn.innerText = '⚙️ Перейти в Конфигуратор';
+                toggleBtn.classList.remove('active');
+            } else {
+                configContainer.style.display = 'block';
+                prebuiltConfigs.style.display = 'none'; // Скрываем готовые сборки
+                toggleBtn.innerText = '❌ Закрыть Конфигуратор';
+                toggleBtn.classList.add('active');
+                updateConfigurator(); // Инициализация
+            }
+        }
+        
+        function updateConfigurator() {
+            let total = 0;
+            let isValid = true;
+            let incompatibilityReason = '';
+            const statusMessage = document.getElementById('configStatusMessage');
+            const buyBtn = document.getElementById('configBuyBtn');
+
+            // 1. Сбор данных и расчет суммы
+            ['Cpu', 'Mb', 'Ram', 'Gpu', 'Psu', 'Case'].forEach(key => {
+                const select = document.getElementById('config' + key);
+                const selectedOption = select.options[select.selectedIndex];
+                const componentKey = key.toLowerCase();
+                
+                configuratorState[componentKey].name = selectedOption.text;
+                configuratorState[componentKey].price = parseFloat(selectedOption.dataset.price || 0);
+                total += configuratorState[componentKey].price;
+
+                // Сбор дополнительных данных для проверки
+                if (key === 'Cpu') {
+                    configuratorState[componentKey].socket = selectedOption.dataset.socket;
+                    configuratorState[componentKey].ramType = selectedOption.dataset.ram; 
+                }
+                if (key === 'Mb') {
+                    configuratorState[componentKey].socket = selectedOption.dataset.socket;
+                    configuratorState[componentKey].ramType = selectedOption.dataset.ram;
+                    configuratorState[componentKey].formFactor = selectedOption.dataset.form; 
+                }
+                if (key === 'Ram') {
+                    configuratorState[componentKey].ramType = selectedOption.dataset.ram;
+                }
+                if (key === 'Gpu') {
+                    // Упрощенный расчет рекомендуемой мощности БП на основе выбранной GPU
+                    const gpuPowerMap = {
+                        'RTX-4090': 850, 'RTX-4080S': 800, 'RX-7900XTX': 850, 'RTX-4070': 650, 
+                        'RX-7800XT': 700, 'RTX-4060': 550, 'RX-6600': 500, 'none': 0
+                    };
+                    const gpuValue = selectedOption.value;
+                    configuratorState[componentKey].requiredPsu = gpuPowerMap[gpuValue] || 0;
+                }
+                if (key === 'Psu') {
+                    configuratorState[componentKey].wattage = parseInt(selectedOption.dataset.wattage || 0);
+                }
+                if (key === 'Case') {
+                    configuratorState[componentKey].formSupport = selectedOption.dataset.formSupport;
+                }
+            });
+
+            // 2. Проверка совместимости
+            const checkComponent = (key) => configuratorState[key].name !== 'Выберите ' + (key === 'mb' ? 'материнскую плату' : key === 'cpu' ? 'процессор' : key === 'ram' ? 'оперативную память' : key === 'gpu' ? 'видеокарту' : key === 'psu' ? 'блок питания' : 'корпус') + '...';
+
+            if (checkComponent('cpu') || checkComponent('mb') || checkComponent('ram') || checkComponent('gpu') || checkComponent('psu') || checkComponent('case')) {
+                // Проверка 1: Сокет CPU и MB
+                if (checkComponent('cpu') && checkComponent('mb')) {
+                    if (configuratorState.cpu.socket !== configuratorState.mb.socket) {
+                        isValid = false;
+                        incompatibilityReason = `Сокет процессора (${configuratorState.cpu.socket}) не совпадает с сокетом материнской платы (${configuratorState.mb.socket}).`;
+                    }
+                }
+
+                // Проверка 2: Тип RAM и MB/CPU
+                if (isValid && checkComponent('ram') && checkComponent('mb')) {
+                    if (configuratorState.ram.ramType !== configuratorState.mb.ramType) {
+                        isValid = false;
+                        incompatibilityReason = `Тип памяти RAM (${configuratorState.ram.ramType}) не совпадает с типом, который поддерживает материнская плата (${configuratorState.mb.ramType}).`;
+                    }
+                }
+                
+                // Проверка 3: Мощность PSU
+                if (isValid && checkComponent('gpu') && checkComponent('psu')) {
+                    if (configuratorState.psu.wattage < configuratorState.gpu.requiredPsu) {
+                        isValid = false;
+                        incompatibilityReason = `Мощность БП (${configuratorState.psu.wattage}W) недостаточна для видеокарты (рекомендовано ${configuratorState.gpu.requiredPsu}W).`;
+                    }
+                }
+                
+                // Проверка 4: Совместимость MB с Корпусом
+                if (isValid && checkComponent('mb') && checkComponent('case')) {
+                    // Разрешаем ATX корпусам вмещать mATX и Mini-ITX
+                    const requiredForm = configuratorState.mb.formFactor;
+                    const caseSupport = configuratorState.case.formSupport;
+                    
+                    if (requiredForm === 'ATX' && !caseSupport.includes('ATX')) {
+                        isValid = false;
+                        incompatibilityReason = `Корпус не поддерживает форм-фактор ATX.`;
+                    }
+                    if (requiredForm === 'mATX' && !caseSupport.includes('mATX') && !caseSupport.includes('ATX')) {
+                        // Если корпус поддерживает только ATX, то он вместит и mATX, но проверим точное совпадение
+                         if (!caseSupport.includes('mATX')) { 
+                            // В данном случае, это упрощенная проверка, ATX-корпус всегда вместит mATX
+                            // Но для строгости, будем проверять, указана ли поддержка
+                            // В реальном мире, это не всегда ошибка. Для примера, оставим как есть.
+                            if (!caseSupport.includes(requiredForm)) {
+                                isValid = false;
+                                incompatibilityReason = `Корпус (${configuratorState.case.name}) не поддерживает форм-фактор материнской платы (${configuratorState.mb.formFactor}).`;
+                            }
+                         }
+                    }
+                    
+                }
+                
+                // Проверка 5: Наличие всех ключевых компонентов (только если нет других ошибок, чтобы не дублировать сообщения)
+                if (isValid && (!checkComponent('cpu') || !checkComponent('mb') || !checkComponent('gpu') || !checkComponent('ram') || !checkComponent('psu') || !checkComponent('case'))) {
+                     isValid = false;
+                     incompatibilityReason = 'Для оформления сборки выберите все комплектующие.';
+                }
+
+            } else {
+                 // Если все "none", это не ошибка, а просто пустая корзина
+                 isValid = true;
+                 incompatibilityReason = 'Выберите комплектующие для начала сборки.';
+            }
+
+
+            // 3. Обновление интерфейса
+            document.getElementById('configTotalPrice').innerText = '$' + total.toFixed(2);
+            statusMessage.classList.remove('config-status-error');
+
+            if (isValid && total > 0 && configuratorState.cpu.name !== 'Выберите процессор...') { // Убедимся, что выбрано что-то кроме "none"
+                statusMessage.innerHTML = '<span style="color: var(--success);">✅ Конфигурация совместима.</span>';
+                buyBtn.disabled = false;
+                buyBtn.style.opacity = 1;
+            } else if (total === 0 || !isValid) {
+                 statusMessage.innerHTML = `<span style="color: ${isValid ? 'var(--text-muted)' : 'var(--error)'};">
+                     ${isValid ? incompatibilityReason : '❌ ОШИБКА: ' + incompatibilityReason}
+                 </span>`;
+                 if (!isValid) statusMessage.classList.add('config-status-error');
+                 buyBtn.disabled = true;
+                 buyBtn.style.opacity = 0.5;
+            }
+        }
+        
+        function configuratorAddToCart() {
+            if (document.getElementById('configBuyBtn').disabled) return;
+            
+            const totalPrice = configuratorState.cpu.price + configuratorState.mb.price + configuratorState.ram.price + configuratorState.gpu.price + configuratorState.psu.price + configuratorState.case.price;
+            
+            // Формируем детальное описание сборки для корзины
+            const productOptions = [
+                `CPU: ${configuratorState.cpu.name.split('[')[0].trim()}`,
+                `MB: ${configuratorState.mb.name.split('[')[0].trim()}`,
+                `RAM: ${configuratorState.ram.name.split('[')[0].trim()}`,
+                `GPU: ${configuratorState.gpu.name.split('[')[0].trim()}`,
+                `PSU: ${configuratorState.psu.name.split('[')[0].trim()}`,
+                `Case: ${configuratorState.case.name.split('[')[0].trim()}`,
+            ].join(' | ');
+
+            const item = {
+                uniqueId: 'custom-build-' + Date.now(), // Уникальный ID для кастомной сборки
+                productId: 999,
+                name: "Сборка ПК (Конфигуратор)",
+                price: totalPrice,
+                quantity: 1,
+                options: productOptions,
+                image: 'https://placehold.co/80x80/0d0d0d/ff3c00?text=PC+Config'
+            };
+
+            cart.push(item);
+            updateCartCount();
+            showBuyConfirmation(document.getElementById('configBuyBtn'));
+            // Закрываем конфигуратор после добавления
+            setTimeout(toggleConfigurator, 1000); 
+            openCart();
+        }
+
+        // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ СЕКЦИЙ ---
+        function showSection(sectionId, event) {
+            if (event) event.preventDefault();
+            
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const targetSection = document.getElementById(sectionId + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+            
+            const navIdMap = {
+                'product': 'navProduct',
+                'processors': 'navProcessors',
+                'builds': 'navBuilds',
+                'warranty': 'navWarranty',
+                'deliveryPayment': 'navDeliveryPayment' // Добавлена новая секция
+            };
+            const activeLink = document.getElementById(navIdMap[sectionId]);
+            if (activeLink) activeLink.classList.add('active');
+
+            const stickyBar = document.getElementById('stickyBuyBar');
+            if (sectionId === 'product') {
+                stickyBar.style.display = 'flex';
+                window.addEventListener('scroll', handleScroll);
+                handleScroll(); 
+            } else {
+                stickyBar.style.display = 'none';
+                window.removeEventListener('scroll', handleScroll);
+                // При переключении сбрасываем конфигуратор в скрытое состояние
+                const configContainer = document.getElementById('configuratorContainer');
+                if (configContainer && configContainer.style.display !== 'none') {
+                    // Используем setTimeout, чтобы не было видно "перескока" текста
+                    setTimeout(toggleConfigurator, 10);
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- ЛОГИКА ЦЕНЫ и КОРЗИНЫ ---
+        function updatePrice() {
+            const select = document.getElementById('vendorSelect');
+            if (!select) return; 
+            
+            const selectedOption = select.options[select.selectedIndex];
+            const priceMod = parseFloat(selectedOption.dataset.priceMod); 
+            const basePriceElement = document.getElementById('displayPrice');
+            const basePrice = parseFloat(basePriceElement.dataset.base-price); 
+            
+            const newPrice = basePrice + priceMod;
+            basePriceElement.innerHTML = `$${newPrice.toFixed(2).split('.')[0]}<small>.${newPrice.toFixed(2).split('.')[1]}</small>`;
+            document.getElementById('stickyPrice').innerText = '$' + newPrice.toFixed(2);
+            document.getElementById('stickyProductName').innerText = document.getElementById('productName').dataset.name + ' (' + selectedOption.text.split('(')[0].trim() + ')';
+        }
+
+        function getProductData(productId, productName, explicitPrice = null) {
+            let basePrice = 0;
+            let optionsText = "";
+            let imageSrc = 'https://placehold.co/80x80/222/FFF?text=Item';
+
+            if (productId === 1) { // 1. Видеокарта (Основной товар)
+                const basePriceRaw = parseFloat(document.getElementById('displayPrice').dataset.basePrice);
+                const priceMod = parseFloat(document.getElementById('vendorSelect').options[document.getElementById('vendorSelect').selectedIndex].dataset.priceMod);
+                basePrice = basePriceRaw + priceMod;
+                imageSrc = 'https://placehold.co/80x80/111/FFF?text=RX+7800+XT';
+                optionsText = "Вендор: " + document.getElementById('vendorSelect').options[document.getElementById('vendorSelect').selectedIndex].text.split('(')[0].trim();
+            } else if (productId >= 101 && productId <= 108) { // 2. Сборка ПК (До 108 включительно)
+                // Ищем по data-name внутри build-card
+                const targetCard = document.querySelector(`.build-card h2[data-name="${productName}"]`);
+                if (targetCard) {
+                    basePrice = parseFloat(targetCard.parentElement.querySelector('.price').dataset.price);
+                } else {
+                    basePrice = explicitPrice; // Используем переданную цену как запасной вариант
+                }
+                imageSrc = 'https://placehold.co/80x80/222/FFF?text=PC+Build';
+                optionsText = "Готовая сборка ПК";
+            } else { // 3. Сопутствующие товары / Процессоры 
+                const productElement = document.querySelector(`h3[data-name="${productName}"]`);
+                if (productElement) {
+                    const priceElement = productElement.parentElement.querySelector('.mini-price');
+                    basePrice = parseFloat(priceElement.dataset.price);
+                    optionsText = productId >= 6 ? 'Процессор' : 'Комплектующее';
+                    const imgElement = productElement.parentElement.querySelector('img');
+                    if (imgElement && imgElement.src) {
+                        imageSrc = imgElement.src;
+                    }
+                }
+            }
+            if (basePrice === 0 && explicitPrice !== null) { basePrice = explicitPrice; }
+
+            return { id: productId, name: productName, price: basePrice, quantity: 1, options: optionsText, image: imageSrc };
+        }
+
+        function addToCart(id, name, price = null) {
+            const product = getProductData(id, name, price);
+            if (product.price === 0) {
+                 console.error("Attempted to add item with 0 price:", name);
+                 return;
+            }
+            const itemId = product.id + '-' + product.options.replace(/[\s\(\)]/g, '_');
+            
+            const existingItem = cart.find(item => item.uniqueId === itemId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ uniqueId: itemId, productId: id, name: product.name, price: product.price, quantity: 1, options: product.options, image: product.image });
+            }
+            updateCartCount();
+            
+            let targetButton = event.currentTarget;
+            if (id === 1) {
+                targetButton = document.querySelector('.sticky-buy-bar button') || document.querySelector('#productSection .buy-btn');
+            }
+            
+            showBuyConfirmation(targetButton);
+        }
+        
+        function changeQuantity(uniqueId, delta) {
+            const item = cart.find(i => i.uniqueId === uniqueId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeItem(uniqueId);
+                } else {
+                    renderCart();
+                }
+            }
+        }
+        
+        function removeItem(uniqueId) {
+            cart = cart.filter(item => item.uniqueId !== uniqueId);
+            renderCart();
+        }
+
+
+        function updateCartCount() {
+            const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.querySelector('.cart-count').innerText = totalCount;
+        }
+        
+        function openCart() {
+            document.getElementById('cartModal').style.display = 'block';
+            updateCartDeliveryInfo(); 
+            renderCart();
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function updateCartDeliveryInfo() {
+            document.getElementById('currentDeliveryMethod').innerText = currentDelivery.name;
+            document.getElementById('currentDeliveryTime').innerText = currentDelivery.time; 
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cartItemsContainer');
+            let total = 0;
+            updateCartCount();
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">Ваша корзина пуста.</div>';
+                document.querySelector('#cartModal .checkout-btn').disabled = true;
+                document.querySelector('#cartModal .checkout-btn').style.opacity = 0.5;
+            } else {
+                document.querySelector('#cartModal .checkout-btn').disabled = false;
+                document.querySelector('#cartModal .checkout-btn').style.opacity = 1;
+
+                container.innerHTML = cart.map(item => {
+                    total += item.price * item.quantity;
+                    // Для конфигуратора показываем детали в виде списка
+                    const optionsHtml = item.productId === 999 
+                        ? `<small style="color: #999; display: block; white-space: pre-wrap; margin-top: 5px;">${item.options.split(' | ').join('\n')}</small>`
+                        : `<small style="color: #999;">${item.options}</small>`;
+
+                    return `
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed #222; min-height: 80px;">
+                            <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: contain; margin-right: 15px; flex-shrink: 0;">
+                            
+                            <div style="flex-grow: 1;">
+                                <strong>${item.name}</strong><br>
+                                ${optionsHtml}
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: 10px;">
+                                <button onclick="changeQuantity('${item.uniqueId}', -1)" style="width: 30px; height: 30px; background: #333; color: white; border: none; cursor: pointer; border-radius: 4px;">-</button>
+                                <span style="min-width: 20px; text-align: center;">${item.quantity}</span>
+                                <button onclick="changeQuantity('${item.uniqueId}', 1)" style="width: 30px; height: 30px; background: var(--accent-red); color: white; border: none; cursor: pointer; border-radius: 4px;">+</button>
+                            </div>
+
+                            <div style="text-align: right; margin-left: 20px; min-width: 100px; flex-shrink: 0;">
+                                <strong style="color: var(--accent-red);">$${(item.price * item.quantity).toFixed(2)}</strong>
+                                <small style="display: block; color: #666; font-size: 0.75rem;">($${item.price.toFixed(2)}/шт)</small>
+                                <a href="#" onclick="event.preventDefault(); removeItem('${item.uniqueId}')" style="color: #888; font-size: 0.75rem; text-decoration: underline;">Удалить</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            document.getElementById('cartTotalValue').innerText = '$' + total.toFixed(2);
+        }
+
+        function showBuyConfirmation(btn) {
+            if (!btn) return;
+            const originalText = btn.innerText;
+            const rootStyle = getComputedStyle(document.documentElement);
+            const successColor = rootStyle.getPropertyValue('--success').trim();
+            const originalBg = btn.getAttribute('data-original-bg') || (btn.style.background.includes('gradient') ? btn.style.background : "linear-gradient(90deg, #ff3c00, #c40000)"); // Сохраняем фон
+            btn.setAttribute('data-original-bg', originalBg);
+
+            btn.style.background = successColor; 
+            btn.innerText = "✓ В КОРЗИНЕ";
+            
+            setTimeout(() => {
+                btn.style.background = originalBg;
+                btn.innerText = originalText;
+            }, 1500);
+        }
+
+        function handleScroll() {
+            const stickyBar = document.getElementById('stickyBuyBar');
+            const priceBox = document.querySelector('#productSection .price-box'); 
+            
+            if (!priceBox) {
+                stickyBar.classList.remove('visible');
+                return;
+            }
+            
+            const boxBottom = priceBox.getBoundingClientRect().bottom;
+
+            if (boxBottom < -50) { 
+                stickyBar.classList.add('visible');
+            } else {
+                stickyBar.classList.remove('visible');
+            }
+        }
+        
+        // --- ЛОГИКА ОФОРМЛЕНИЯ ЗАКАЗА (НОВАЯ) ---
+        function calculateTotal() {
+            return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+        }
+        
+        function openCheckout() {
+            if (cart.length === 0) {
+                alert('Ваша корзина пуста! Добавьте товары, чтобы оформить заказ.');
+                return;
+            }
+
+            closeCart(); // Закрываем корзину
+
+            const subtotal = calculateTotal();
+            const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            // Заполнение данных в модальном окне оформления
+            document.getElementById('deliveryMethod').value = currentDelivery.name;
+            document.getElementById('summaryCount').innerText = totalCount;
+            document.getElementById('summarySubtotal').innerText = '$' + subtotal.toFixed(2);
+            document.getElementById('summaryTotal').innerText = '$' + subtotal.toFixed(2);
+            
+            // Сброс формы и окна подтверждения
+            document.getElementById('checkoutForm').reset();
+            document.getElementById('checkoutForm').style.display = 'block';
+            document.getElementById('orderConfirmation').style.display = 'none';
+
+            document.getElementById('checkoutModal').style.display = 'block';
+        }
+        
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+        
+        function submitOrder(event) {
+            event.preventDefault(); // Предотвращаем стандартную отправку формы
+            
+            const total = calculateTotal().toFixed(2);
+            const orderId = Math.floor(Math.random() * 900000) + 100000;
+            
+            // Собираем данные (для примера)
+            const orderData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                delivery: document.getElementById('deliveryMethod').value,
+                address: document.getElementById('deliveryAddress').value,
+                payment: document.getElementById('paymentMethod').value,
+                total: total,
+                items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price, options: item.options }))
+            };
+
+            console.log('--- Order Submitted ---', orderData);
+
+            // Имитация успешной отправки
+            document.getElementById('orderNumber').innerText = orderId;
+            document.getElementById('checkoutForm').style.display = 'none';
+            document.getElementById('orderConfirmation').style.display = 'block';
+            
+            // Очистка корзины после успешного заказа
+            cart = [];
+            updateCartCount();
+
+            // Автоматическое закрытие окна через 5 секунд
+            setTimeout(closeCheckout, 5000);
+        }
+        
+        // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+        function openTab(evt, tabName) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.remove('active'));
+            document.querySelectorAll(".tab").forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        function setImg(el, src) {
+            const mainImg = document.getElementById('mainImg');
+            mainImg.style.opacity = 0;
+            setTimeout(() => { mainImg.src = src; mainImg.style.opacity = 1; }, 200);
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+        function checkCompatibility() {
+            const resultDiv = document.getElementById('compatibilityResult');
+            const cpu = document.getElementById('cpuCheck').value.trim();
+            if (cpu.length < 5) {
+                resultDiv.innerHTML = '<span style="color: var(--warning);">⚠️ Введите полную модель процессора и корпуса для проверки.</span>';
+                return;
+            }
+            resultDiv.innerHTML = '<span style="color: var(--success);">✅ Проверка выполнена! **' + cpu + '** полностью совместим с RX 7800 XT (LGA1700/AM5).</span>';
+        }
+        
+        function updateDeliveryOption() {
+            const selectedRadio = document.querySelector('.delivery-options-select input[name="delivery"]:checked');
+            if (selectedRadio) { 
+                currentDelivery = deliveryMethods[selectedRadio.value]; 
+            }
+            if (document.getElementById('cartModal').style.display === 'block') { updateCartDeliveryInfo(); } 
+        }
+        function subscribe(event) { 
+            event.preventDefault(); 
+            document.getElementById('subscribe-message').innerText = '✅ Вы успешно подписались! Скоро пришлем новости.';
+        }
+
+        // --- ИНИЦИАЛИЗАЦИЯ И СТАРТ ---
+        window.onclick = function(event) {
+            const cartModal = document.getElementById('cartModal');
+            const checkoutModal = document.getElementById('checkoutModal');
+            if (event.target == cartModal) { closeCart(); }
+            if (event.target == checkoutModal) { closeCheckout(); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('product'); 
+            updatePrice(); 
+            updateDeliveryOption();
+            // Первоначальный вызов для конфигуратора, чтобы настроить его состояние
+            if (document.getElementById('configuratorContainer').style.display !== 'none') {
+                updateConfigurator();
+            }
+        });
+        
+    </script>
+</body>
+</html>
+<div class="menu-btn" onclick="openDrawer()">
+    ⚙️ Меню
+</div>
+<div class="cart-btn" onclick="openCart()">
+    ```
+
+### 3. Добавьте HTML-структуру шторки
+
+Вставьте этот код **после** всех модальных окон (после `<div id="checkoutModal" class="modal">` и перед закрывающим тегом `<footer>`):
+
+```html
+<div id="settingsDrawer" class="drawer" onclick="if(event.target.id === 'settingsDrawer') closeDrawer()">
+    <div class="drawer-content">
+        <span class="drawer-close-btn" onclick="closeDrawer()">&times;</span>
+        
+        <h2 style="margin-top: 15px;">👤 Аккаунт</h2>
+        <div class="account-box">
+            <p style="color: var(--text-main); font-weight: 600;">Статус: Гость</p>
+            <button class="buy-btn" style="background: #007bff; margin-top: 10px; padding: 10px; font-size: 1rem;">Войти</button>
+            <button class="buy-btn" style="background: #333; margin-top: 5px; padding: 10px; font-weight: 500; font-size: 1rem;">Регистрация</button>
+        </div>
+
+        <h2>💰 Бонусы</h2>
+        <div class="bonus-box">
+            <p style="color: var(--warning); font-weight: 600;">Ваши бонусы: <span id="userBonusCount">0</span> BFC</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Бонусы (BoBi Fury Coins) будут начислены после регистрации и первой покупки.</p>
+        </div>
+
+        <h2>⚙️ Настройки</h2>
+        <div class="settings-group">
+            <label for="langSelect" style="display: block; margin-bottom: 5px; color: var(--text-muted);">Язык:</label>
+            <select id="langSelect" style="width: 100%; margin-bottom: 15px;">
+                <option value="ru">Русский</option>
+                <option value="en">English</option>
+                <option value="uk">Українська</option>
+            </select>
+            
+            <label for="themeSelect" style="display: block; margin-bottom: 5px; color: var(--text-muted);">Тема сайта:</label>
+            <select id="themeSelect" style="width: 100%;">
+                <option value="dark">Тёмная (По умолчанию)</option>
+                <option value="light">Светлая (Требуется JS)</option>
+                <option value="red">Акцент Red</option>
+            </select>
+        </div>
+        
+        <h2 style="margin-top: 30px;">📄 Соглашение</h2>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Ознакомьтесь с <a href="#" style="color: var(--accent-red); font-weight: 600;">Пользовательским соглашением</a> и <a href="#" style="color: var(--accent-red); font-weight: 600;">Политикой конфиденциальности</a>.
+        </p>
+
+    </div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoBi Store | Компьютерные комплектующие и Сборки ПК</title>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<script src="script.js"></script>
+    
+</body>
+</html>

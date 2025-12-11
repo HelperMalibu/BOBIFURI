@@ -1,0 +1,79 @@
+/* --- 10. БОКОВАЯ ШТОРКА (DRAWER) - НОВЫЕ СТИЛИ --- */
+.drawer {
+    height: 100%;
+    width: 0; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 3000; /* Выше модальных окон */
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    backdrop-filter: blur(10px);
+}
+
+.drawer-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--bg-panel);
+    height: 100%;
+    width: 0; /* Добавляем transition для содержимого */
+    max-width: 300px;
+    padding: 20px;
+    border-left: 3px solid var(--accent-red);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    transition: width 0.5s ease-in-out;
+}
+
+.drawer-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 36px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.drawer-close-btn:hover {
+    color: var(--accent-red);
+}
+
+.drawer h2 {
+    color: var(--accent-red);
+    margin-top: 25px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #333;
+}
+
+.account-box, .bonus-box, .settings-group {
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Добавьте медиа-запрос для адаптивности */
+@media (max-width: 900px) {
+    /* ... (остальные медиа-запросы) ... */
+    /* Адаптивность для шторки */
+    .drawer-content { max-width: 250px; }
+}
+
+/* НОВЫЙ СТИЛЬ ДЛЯ КНОПКИ МЕНЮ (НАЙДИТЕ И ЗАМЕНИТЕ В СЕКЦИИ HEADER) */
+.menu-btn {
+    background: var(--bg-lighter);
+    border: 1px solid var(--border);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    margin-right: 15px; /* Отступ от корзины */
+}
+.menu-btn:hover { border-color: var(--accent-red); }
